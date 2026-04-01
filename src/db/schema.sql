@@ -1,0 +1,23 @@
+CREATE TABLE users(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+
+CREATE TABLE departments(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+
+
+CREATE TABLE employees(
+  id            SERIAL PRIMARY KEY,
+  name          VARCHAR(255) NOT NULL,
+  email         VARCHAR(255) UNIQUE NOT NULL,
+  salary        INTEGER NOT NULL,
+  city          VARCHAR(50),
+  created_at    TIMESTAMPTZ  DEFAULT NOW()
+)
