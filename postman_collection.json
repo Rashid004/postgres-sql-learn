@@ -1,0 +1,148 @@
+{
+  "info": {
+    "name": "pg-drizzle",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/products",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Notebook\",\n  \"priceCents\": 500,\n  \"stock\": 10\n}"
+            }
+          }
+        },
+        {
+          "name": "Create product 2 (for checkout test)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/products",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pen\",\n  \"priceCents\": 150,\n  \"stock\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "List products",
+          "request": { "method": "GET", "url": "{{baseUrl}}/products" }
+        },
+        {
+          "name": "Get product by id",
+          "request": { "method": "GET", "url": "{{baseUrl}}/products/1" }
+        },
+        {
+          "name": "Get product - 404 case",
+          "request": { "method": "GET", "url": "{{baseUrl}}/products/9999" }
+        },
+        {
+          "name": "Update product",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/products/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"priceCents\": 600,\n  \"stock\": 12\n}"
+            }
+          }
+        },
+        {
+          "name": "Update product - invalid (negative price, expect 400)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/products/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"priceCents\": -50\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete product",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/products/1" }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Checkout - success",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/orders/checkout",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Rashid\",\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 2 },\n    { \"productId\": 2, \"quantity\": 1 }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Checkout - oversell (expect 409, rolls back)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/orders/checkout",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Rashid\",\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 999 }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Checkout - unknown product (expect 404, rolls back)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/orders/checkout",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Rashid\",\n  \"items\": [\n    { \"productId\": 9999, \"quantity\": 1 }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Checkout - empty items (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/orders/checkout",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Rashid\",\n  \"items\": []\n}"
+            }
+          }
+        },
+        {
+          "name": "Get order by id",
+          "request": { "method": "GET", "url": "{{baseUrl}}/orders/1" }
+        },
+        {
+          "name": "Get order - 404 case",
+          "request": { "method": "GET", "url": "{{baseUrl}}/orders/9999" }
+        }
+      ]
+    }
+  ]
+}
